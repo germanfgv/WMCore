@@ -123,6 +123,24 @@ class WMWorkloadHelper(PersistencyHelper):
 
         return
 
+    def setTaskEnvironmentVariables(self, envDict):
+        """
+        _setTaskEnvironmentVariables_
+
+        Used for setting environment variables for each task in a request.
+        """
+        if isinstance(envDict, dict):
+            pass
+        else:
+            return
+
+        for task in self.taskIterator():
+            for taskNode in task.nodeIterator():
+                task = WMTaskHelper(taskNode)
+                for key in envDict.keys():
+                    task.addEnvironmentVariable(key, envDict[key])
+        return
+
     def setStepMapping(self, mapping):
         """
         _setStepMapping_
