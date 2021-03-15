@@ -17,6 +17,7 @@ from WMCore.WMException import WMException
 from WMCore.WMSpec.ConfigSectionTree import findTop
 from WMCore.WMSpec.Persistency import PersistencyHelper
 from WMCore.WMSpec.WMTask import WMTask, WMTaskHelper
+from WMCore.WMSpec.Steps.Template import CoreHelper
 from WMCore.WMSpec.WMWorkloadTools import (validateArgumentsUpdate, loadSpecClassByType,
                                            setAssignArgumentsWithDefault)
 
@@ -124,6 +125,23 @@ class WMWorkloadHelper(PersistencyHelper):
                 continue
             task.updateLFNsAndDatasets(dictValues=assignArgs, stepMapping=stepNameMapping)
 
+        return
+
+    def setStepEnvironmentVariables(self, envDict):
+        """
+        _setStepEnvironmentVariables_
+        Used for setting environment variables for each step in a request.
+        """
+        if isinstance(envDict, dict):
+            pass
+        else:
+            return
+
+        for task in self.taskIterator():
+            for taskNode in task.nodeIterator():
+                task = WMTaskHelper(taskNode)
+                for key in envDict.keys():
+                    task.addEnvironmentVariable(key, envDict[key])    
         return
 
     def setStepMapping(self, mapping):

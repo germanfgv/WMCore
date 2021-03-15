@@ -331,6 +331,17 @@ class WMTaskHelper(TreeHelper):
         master(self)
         return
 
+    def addEnvironmentVariable(self, varname, setting):
+        """
+        _addEnvironmentVariable_
+
+        add a key = value style setting to the environment for this
+        task
+
+        """
+        setattr(self.data.environment, varname, setting)
+        return
+
     def setupEnvironment(self):
         """
         _setupEnvironment_
@@ -341,10 +352,11 @@ class WMTaskHelper(TreeHelper):
 
         if not hasattr(self.data, 'environment'):
             # No environment to setup, pass
-            return
+            envDict = {"WMAGENT_SITE_CONFIG_OVERRIDE" : "/cvmfs/cms.cern.ch/SITECONF/T0_CH_CERN_WRONG/JobConfig/site-local-config.xml"}
+        else:
+            envDict = self.data.environment.dictionary_()
 
-        envDict = self.data.environment.dictionary_()
-
+        logging.info("PREEEEEEE")
         for key in envDict:
             if str(envDict[key].__class__) == "<class 'WMCore.Configuration.ConfigSection'>":
                 # At this point we do not support the
@@ -352,6 +364,9 @@ class WMTaskHelper(TreeHelper):
                 continue
             else:
                 os.environ[key] = envDict[key]
+                logging.info("DONE")
+        
+        logging.info("POSTTTTT")
 
         return
 
@@ -1792,6 +1807,7 @@ class WMTask(ConfigSectionTree):
         self.section_("input")
         self.section_("notifications")
         self.section_("subscriptions")
+        self.section_("environment")
         self.notifications.targets = []
         self.input.sandbox = None
         self.input.section_("splitting")
