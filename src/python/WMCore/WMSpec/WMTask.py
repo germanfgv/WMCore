@@ -331,6 +331,17 @@ class WMTaskHelper(TreeHelper):
         master(self)
         return
 
+    def addEnvironmentVariable(self, varname, setting):
+        """
+        _addEnvironmentVariable_
+
+        add a key = value style setting to the environment for this
+        task
+
+        """
+        setattr(self.data.environment, varname, setting)
+        return
+
     def setupEnvironment(self):
         """
         _setupEnvironment_
@@ -1792,6 +1803,7 @@ class WMTask(ConfigSectionTree):
         self.section_("input")
         self.section_("notifications")
         self.section_("subscriptions")
+        self.section_("environment")
         self.notifications.targets = []
         self.input.sandbox = None
         self.input.section_("splitting")
