@@ -38,6 +38,8 @@ def loadSiteLocalConfig():
         else:
             msg = "%s env. var. provided but not pointing to an existing file, ignoring." % overVarName
             logging.log(logging.ERROR, msg)
+    else:
+        logging.log(logging.ERROR, "No Override!! :(")
 
     defaultPath = "$CMS_PATH/SITECONF/local/JobConfig/site-local-config.xml"
     actualPath = os.path.expandvars(defaultPath)
