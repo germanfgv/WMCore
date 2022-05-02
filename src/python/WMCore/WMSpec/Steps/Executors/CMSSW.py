@@ -236,6 +236,11 @@ class CMSSW(Executor):
         with open(configPath, 'w') as handle:
             handle.write(CONFIG_BLOB)
 
+        # Running scripts before cmsRun execution
+        logging.info("RUNNING POST SCRAM SCRIPTS")
+        results = subprocess.run(["sh", "../../PostScramScript.sh"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        logging.info(results.stdout)
+
         # spawn this new process
         # the script looks for:
         # <SCRAM_COMMAND> <SCRAM_PROJECT> <CMSSW_VERSION> <JOB_REPORT> <EXECUTABLE> <CONFIG>

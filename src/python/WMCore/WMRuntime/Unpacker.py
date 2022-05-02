@@ -87,6 +87,13 @@ def createWorkArea(sandbox):
         os.write(fd, startupScript)
         os.close(fd)
 
+    # need to pull out the startup file from the zipball
+    with zipfile.ZipFile(os.path.join(jobDir, 'WMCore.zip'), 'r') as zfile:
+        startupScript = zfile.read('WMCore/WMRuntime/Scripts/PostScramScript.sh')
+        fd = os.open(os.path.join(jobDir, 'PostScramScript.sh'), os.O_CREAT | os.O_WRONLY)
+        os.write(fd, startupScript)
+        os.close(fd)
+
     logging.info("PYTHONPATH=%s", os.environ.get("PYTHONPATH"))
 
     return jobDir
