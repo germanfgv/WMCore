@@ -89,6 +89,20 @@ def uploadWorker(workInput, results, dbsUrl, gzipEncoding=False):
         # Do stuff with DBS
         try:
             logging.info("About to call insert block for: %s", name)
+            if block["dataset_conf_list"][0]["output_module_label"]=="ALCARECOStreamPromptCalibProdSiStripHitEfficiency":
+                newModule="ALCARECOStreamPromptCalibProdSiStripHitEff"
+                for dict in block["dataset_conf_list"]:
+                    dict["output_module_label"]=newModule
+                for dict in block["file_conf_list"]:
+                    dict["output_module_label"]=newModule
+
+            if block["dataset_conf_list"][0]["output_module_label"]=="ALCARECOStreamPromptCalibProdSiPixelLorentzAngle":
+                newModule="ALCARECOStreamPromptCalibProdSiPixelLA"
+                for dict in block["dataset_conf_list"]:
+                    dict["output_module_label"]=newModule
+                for dict in block["file_conf_list"]:
+                    dict["output_module_label"]=newModule
+
             dbsApi.insertBulkBlock(blockDump=block)
             results.put({'name': name, 'success': "uploaded"})
         except Exception as ex:
