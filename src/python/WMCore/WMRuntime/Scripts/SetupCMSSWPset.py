@@ -646,7 +646,7 @@ class SetupCMSSWPset(ScriptInterface):
                     return next(iter(scramArch or []), None)
 
         # CRAB3 needs to use an environment var to get the version
-        return os.environ.get("SCRAM_ARCH", "")
+        return "el8_amd64_gcc12"
 
 
     def __call__(self):
