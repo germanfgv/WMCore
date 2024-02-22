@@ -22,7 +22,6 @@ class BaseModifier(object):
     def __init__(self, config):
         object.__init__(self)
         self.backupPath = "./oldSandboxes"
-        #self.tempFolder --> not being used? Initialized as what?
         self.sandboxPath = None
         self.config = config
 
@@ -47,11 +46,21 @@ class BaseModifier(object):
         shutil.copyfile(jobPKL['sandbox'], backupFile)
 
         tempDir = TemporaryDirectory()
-        tFile = tarfile.open(jobPKL['sandbox'], "r")
-        tFile.extractall(tempDir)
-        
-        shutil.copyfile(jobPKL['spec'], tempDir+'/WMSandbox/WMWorkload.pkl')
+        tempDirName = tempDir.name
 
+        tFile = tarfile.open(jobPKL['sandbox'], "r")
+        tFile.extractall(tempDirName)
+        
+        shutil.copyfile(jobPKL['spec'], tempDirName+'/WMSandbox/WMWorkload.pkl')
+
+        archivePath = jobPKL['sandbox']
+        with tarfile.open(archivePath, "w:bz2") as tar:
+            for folder in os.listdir(tempDirName):
+                tar.add(f"{tempDirName}/{folder}", arcname=folder)
+
+        tempDir.cleanup()
+        return
+        
 
     def getWorkload(self, jobPKL):
         """
