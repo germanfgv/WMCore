@@ -21,7 +21,7 @@ class BaseModifier(object):
 
     def __init__(self, config):
         object.__init__(self)
-        self.backupPath = "./oldSandboxes"
+        self.backupPath = "oldSandboxes/"
         self.sandboxPath = None
         self.config = config
 
@@ -41,6 +41,7 @@ class BaseModifier(object):
 
     def updateSandbox(self, jobPKL, workload): # Not using workload?
         date = datetime.datetime.now().strftime("%y%m%d%H%M%S")
+        os.makedirs(os.path.dirname(self.backupPath), exist_ok=True)
         backupFile = f"{self.backupPath}/{jobPKL['workflow']}_{date}.tar.bz2"
 
         shutil.copyfile(jobPKL['sandbox'], backupFile)

@@ -80,6 +80,7 @@ class MemoryModifier(BaseModifier):
 
         self.changeJobPkl(pklFile, jobPKL, newMemory)
         self.changeSandbox(jobPKL, newMemory)
+        logging.info('Old maxPSS: %d. New maxPSS: %d', job['estimatedMemoryUsage'], newMemory)
 
     def modifyJob(self, job):
         try:
@@ -99,5 +100,5 @@ class MemoryModifier(BaseModifier):
             return
         
         else:
-            logging.info('MemoryModifier.changeMemory called successfully')
+            logging.info('Modifying memory for job %d', job['id'])
             self.changeMemory(job, settings)
