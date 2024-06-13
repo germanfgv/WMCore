@@ -23,6 +23,7 @@ from WMCore.WMRuntime.Tools.Scram import Scram, getSingleScramArch, isCMSSWSuppo
 from WMCore.WMSpec.Steps.Executor import Executor
 from WMCore.WMSpec.Steps.WMExecutionFailure import WMExecutionFailure
 from WMCore.Storage.SiteLocalConfig import loadSiteLocalConfig
+from WMCore.Storage.TrivialFileCatalog import tfcFilename, tfcProtocol
 
 
 class LogCollect(Executor):
@@ -68,7 +69,13 @@ class LogCollect(Executor):
             overrides = self.step.override.dictionary_()
             if overrides.get('logRedirectSiteLocalConfig', None):
                 siteCfg = loadSiteLocalConfig()
-                overrides.update(siteCfg.localStageOut)
+                tfc=siteCfg.trivialFileCatalog()
+                lso=siteCfg.localStageOut
+                prefix, lfn=tfc.matchLFN(tfcProtocol(lso.get('catalog', None)),"/store/").split("/store")
+
+                overrides.update(lso)
+                overrides['lfn-prefix']=prefix
+                
 
         # Set wait to over an hour
         waitTime = overrides.get('waitTime', 3600 + (self.step.retryDelay * self.step.retryCount))
