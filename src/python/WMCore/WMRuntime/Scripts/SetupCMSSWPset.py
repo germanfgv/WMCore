@@ -637,16 +637,7 @@ class SetupCMSSWPset(ScriptInterface):
 
         Return a string representing the first Scram version to be used (or all)
         """
-        if not self.crabPSet:
-            scramArch = self.step.data.application.setup.scramArch
-            if allSteps:
-                return scramArch
-            else:
-                if isinstance(scramArch, list):
-                    return next(iter(scramArch or []), None)
-
-        # CRAB3 needs to use an environment var to get the version
-        return os.environ.get("SCRAM_ARCH", "")
+        return "el8_amd64_gcc12"
 
 
     def __call__(self):
