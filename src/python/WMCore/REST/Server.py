@@ -824,6 +824,7 @@ class MiniRESTApi(object):
 
         # Validate arguments. May convert arguments too, e.g. str->int.
         safe = RESTArgs([], {})
+        cherrypy.log()
         for v in apiobj['validation']:
             v(apiobj, request.method, api, param, safe)
         validate_no_more_input(param)
@@ -1381,6 +1382,7 @@ class DBConnectionPool(Thread):
             dbh = arg["handle"]
             err = arg["error"]
             if dbh or err or now >= until:
+                self.logstatus()
                 arg["abandoned"] = True
                 break
             sigready.wait(until - now)
@@ -1994,11 +1996,18 @@ class DatabaseRESTApi(RESTApi):
         module = "%s.%s" % (apiobj['entity'].__class__.__module__,
                             apiobj['entity'].__class__.__name__)
         id = "%s %s %s" % (method, request.db["instance"], api)
-        dbh, err = request.db["pool"].get(id, module)
+        while True:
+            dbh, err = request.db["pool"].get(id, module)
+            if dbh or err:
+                break
+            cherrypy.log("ERROR: Unavailable! Retry!")
 
         if err:
             self._dberror(err[0], err[1], True)
         elif not dbh:
+            cherrypy.log("pool: %s" % str(request.db["pool"]))
+            cherrypy.log("id: %s ,  module: %s" % (id, module))
+            cherrypy.log("dbh: %s" % str(dbh))
             del request.db
             raise DatabaseUnavailable()
         else:
