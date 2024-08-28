@@ -155,6 +155,7 @@ class XRDCPImpl(StageOutImpl):
 
             copyCommand += "if [ $REMOTE_SIZE ] && [ $LOCAL_SIZE == $REMOTE_SIZE ]; then exit 0; "
             copyCommand += "else echo \"ERROR: Size Mismatch between local and SE\"; %s exit 60311 ; fi" % removeCommand
+        logging.info("Command: %s", copyCommand)
 
         return copyCommand
 
