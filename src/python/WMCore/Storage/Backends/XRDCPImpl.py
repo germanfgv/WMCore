@@ -106,8 +106,8 @@ class XRDCPImpl(StageOutImpl):
             if os.path.isfile(initFile):
                 copyCommand += "source %s\n" % initFile
 
-        if args.wma_disablewriterecovery:
-            copyCommand += "env XRD_WRITERECOVERY=0 "
+        # if args.wma_disablewriterecovery:
+        copyCommand += "env XRD_WRITERECOVERY=0 "
 
         if args.wma_preload:
             xrdcpCmd = "%s xrdcp" % args.wma_preload
