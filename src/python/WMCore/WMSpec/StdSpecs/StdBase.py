@@ -176,6 +176,8 @@ class StdBase(object):
         if dataTier == "None":
             dataTier = None
 
+        dataTier = "NANOAOD"
+
         StdBase.skimMap[cmsswVersion][skim] = dataTier
 
         return dataTier
@@ -706,6 +708,7 @@ class StdBase(object):
         elif dataTier in ("NANOAOD", "NANOAODSIM"):
             mergeTaskCmsswHelper.setDataProcessingConfig("do_not_use", "merge",
                                                          mergeNANO=True)
+            logging.info("Adding mergeNano: %s", mergeTask.name())
         else:
             mergeTaskCmsswHelper.setDataProcessingConfig("do_not_use", "merge")
 
