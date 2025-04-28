@@ -561,7 +561,8 @@ class JobCreatorPoller(BaseWorkerThread):
                     tempDict.update(processDict)
                     tempDict['jobGroup'] = wmbsJobGroup
                     tempDict['jobNumber'] = jobNumber
-                    tempDict['inputDatasetLocations'] = wmbsJobGroup.getLocationsForJobs()
+                    #tempDict['inputDatasetLocations'] = wmbsJobGroup.getLocationsForJobs()
+                    tempDict['inputDatasetLocations'] = ['T2_CH_CERN']
 
                     jobGroup = creatorProcess(work=tempDict,
                                               jobCacheDir=self.jobCacheDir)
